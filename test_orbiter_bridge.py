@@ -36,19 +36,13 @@ ORBITER_ID = 9002  # 9002 は Arbitrum への転送を示す
 AMOUNT_ETH = 0.00047
 amount_wei = orbiter_base.w3.to_wei(AMOUNT_ETH, 'ether') + ORBITER_ID
 
-# Orbiterのデータフォーマット生成関数
-def generate_orbiter_data(to_address, to_chain_id):
-    address_suffix = to_address[-4:]
-    chain_id_encoded = str(9000 + to_chain_id).zfill(3)
-    return f"{address_suffix}{chain_id_encoded}"
 
 # 転送先情報
-TO_ADDRESS = USER_ADDRESS  # 自分のアドレスに送信
-TO_CHAIN_ID = 42161  # Arbitrum One のチェーンID
+types = ["address"] # type address list
+TO_ADDRESS = [orbiter_base.user_address]  # values list 自分のアドレス
 
 # Orbiter用のデータ生成
-orbiter_data = generate_orbiter_data(TO_ADDRESS, TO_CHAIN_ID)
-byte_data = orbiter_base.w3.to_bytes(hexstr=f"0x{orbiter_data}")
+byte_data = orbiter_base.encode(values=TO_ADDRESS ,types=types)
 
 # ガス料金の取得
 gas_fees = orbiter_base.get_block_gas_fees()
@@ -61,7 +55,7 @@ gas_limit = orbiter_base.estimate_gas_limit(
     value=amount_wei
 )
 
-# トランザクションの構築 address,bytes
+# トランザクションの構築
 tx = orbiter_base.contract.functions.transfer(
     ORBITER_BRIDGE1_CONTRACT, 
     byte_data
@@ -78,12 +72,9 @@ tx = orbiter_base.contract.functions.transfer(
 
 
 #トランザクションの署名と送信
-try:
-    signed_tx = orbiter_base.w3.eth.account.sign_transaction(tx, os.getenv("KEY"))
-    tx_hash = orbiter_base.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-    print(f"トランザクション送信しました。Hash: {tx_hash.hex()}")
-except Exception as e:
-    print(f"トランザクション送信エラー:{e}")    
+signed_tx = orbiter_base.w3.eth.account.sign_transaction(tx, os.getenv("KEY"))
+tx_hash = orbiter_base.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+print(f"トランザクション送信完了。Hash: {tx_hash.hex()}")
 
 # トランザクション確認の待機
 tx_receipt = orbiter_base.w3.eth.wait_for_transaction_receipt(tx_hash)
