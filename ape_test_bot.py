@@ -5,14 +5,14 @@ from dotenv import load_dotenv
 from web3utility import Web3Utility
 load_dotenv('web3.env')
 with open('ape_abi.json', mode='r') as file:
-    curve_arb_abi = json.load(file)
+    ape_abi = json.load(file)
 
 ape_bot = Web3Utility(
     rpc_url='https://choice_chain.calderachain.xyz/http',
     rpc_key='',
     chain='apechain',
     contract_address="0xe4103e80c967f58591a1d7cA443ed7E392FeD862",
-    abi=curve_arb_abi,
+    abi=ape_abi,
     user_address=os.getenv('ADDRESS')
 )
 # make sendParam, _fee, _refundAddress
