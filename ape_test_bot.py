@@ -18,7 +18,7 @@ ape_bot = Web3Utility(
 # make sendParam, _fee, _refundAddress
 # sendParam
 dstEid = 30110 #arb uint32
-to = ape_bot.w3.to_bytes(hexstr='0x8bed0eCED8b89541AA5A95357fDd589aCF24579C').rjust(32, b'\0') #bytes32
+to = ape_bot.w3.to_bytes(hexstr=ape_bot.user_address).rjust(32, b'\0') #bytes32
 amountLD = int(0.1 * (10 ** 18)) #uint256
 minAmountLD = int(amountLD * 0.99) #uint256
 extraOptions = ape_bot.w3.to_bytes(hexstr='0x0003010011010000000000000000000000000000fde8') #bytes
