@@ -74,9 +74,13 @@ class Web3Utility:
             'baseFeeAvg': int(base_fee_avg),
         }
 
-    def decode(self, data: str, types: List[str]) -> List[Any]:
-        clean_data = data[2:] if data.startswith('0x') else data
-        byte_data = bytes.fromhex(clean_data)
+    def decode(self, data: Union[str, bytes], types: List[str]) -> List[Any]:
+        if isinstance(data, bytes):
+            byte_data = data
+        else:
+            clean_data = data[2:] if data.startswith('0x') else data
+            byte_data = bytes.fromhex(clean_data)
+        
         decoded = self.w3.codec.decode(types, byte_data)
         return list(decoded)
 
