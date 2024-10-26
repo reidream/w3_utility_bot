@@ -33,6 +33,7 @@ class Web3Utility:
             full_rpc_url = rpc_url.replace("choice_chain", chain) + rpc_key
             self.w3 = Web3(Web3.HTTPProvider(full_rpc_url))
             self.target_contract = self.w3.to_checksum_address(contract_address)
+            self.abi = abi
             self.user_address = self.w3.to_checksum_address(user_address)
             self.contract = self.w3.eth.contract(address=self.target_contract, abi=abi)
              

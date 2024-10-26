@@ -26,7 +26,7 @@ orbiter_base = Web3Utility(
     rpc_url=RPC_URL,
     rpc_key=RPC_KEY, 
     chain=CHAIN, 
-    contract_address=ORBITER_BRIDGE1_CONTRACT,
+    contract_address=ORBITER_BASE_CONTRACT,
     abi=ORBITER_ABI,
     user_address=USER_ADDRESS
 )
@@ -57,7 +57,7 @@ gas_limit = orbiter_base.estimate_gas_limit(
 
 # トランザクションの構築
 tx = orbiter_base.contract.functions.transfer(
-    ORBITER_BRIDGE1_CONTRACT, 
+    ORBITER_BRIDGE2_CONTRACT, 
     byte_data
 ).build_transaction({
     'from': orbiter_base.user_address,
@@ -69,7 +69,7 @@ tx = orbiter_base.contract.functions.transfer(
     'type': '0x2',
     'chainId': orbiter_base.w3.eth.chain_id
 })
-
+print(tx)
 
 #トランザクションの署名と送信
 signed_tx = orbiter_base.w3.eth.account.sign_transaction(tx, os.getenv("KEY"))

@@ -8,7 +8,7 @@ load_dotenv('web3.env')
 
 # 定数
 STARGATE_BASE_POOLNATIVE_SOL = "0xdc181Bd607330aeeBEF6ea62e03e5e1Fb4B6F7C7"
-CHAIN = "base"
+CHAIN = "scroll"
 RPC_URL = os.getenv("INFURA_URL")
 RPC_KEY = os.getenv("RPC_KEY")
 USER_ADDRESS = os.getenv("ADDRESS")
@@ -22,19 +22,19 @@ stg_base = Web3Utility(
     rpc_url=RPC_URL,
     rpc_key=RPC_KEY,
     chain=CHAIN,
-    contract_address=STARGATE_BASE_POOLNATIVE_SOL,
+    contract_address="0xC2b638Cb5042c1B3c5d5C969361fB50569840583",#STARGATE_BASE_POOLNATIVE_SOL,
     abi=STARGATE_BASE_ABI,
     user_address=USER_ADDRESS
 )
 
 # Layer ZeroとStargateのID
 LZ_STG_ID = 30000
-STG_ARB_ID = 110
+STG_ARB_ID = 183
 DESTINATION_EID = LZ_STG_ID + STG_ARB_ID
 
 # トランザクションパラメータの準備
 to_address = stg_base.w3.to_bytes(hexstr=stg_base.user_address).rjust(32, b"\0")  # 32 bytes
-amount_ld = stg_base.w3.to_wei(0.00002, 'ether')  # uint256
+amount_ld = stg_base.w3.to_wei(0.0004, 'ether')  # uint256
 min_amount_ld = int(amount_ld * 0.98)  # uint256
 extra_options = b''  # bytes
 compose_msg = b''  # bytes
@@ -81,8 +81,9 @@ tx = stg_base.contract.functions.send(
     'type': '0x2',
     'chainId': stg_base.w3.eth.chain_id,
 })
+print(tx)
 
-# トランザクションの署名と送信
+#トランザクションの署名と送信
 try:
     signed_tx = stg_base.w3.eth.account.sign_transaction(tx, os.getenv('KEY'))
     tx_hash = stg_base.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
