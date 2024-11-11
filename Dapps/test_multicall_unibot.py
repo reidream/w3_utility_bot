@@ -54,6 +54,7 @@ encoded_unwrapWETH9 = uni_bot.contract.encodeABI(fn_name="unwrapWETH9", args=[pa
 
 # マルチコールデータの作成
 multicall_data = [encoded_exactInput, encoded_unwrapWETH9]
+print(multicall_data)
 
 # ガスリミットとガス料金の取得
 gaslimit = uni_bot.estimate_gas_limit(multicall_data, function_name="multicall")
@@ -71,18 +72,19 @@ tx = uni_bot.contract.functions.multicall(multicall_data).build_transaction({
    'chainId': uni_bot.w3.eth.chain_id
 })
 
-# トランザクションの署名と送信
-signed_tx = uni_bot.w3.eth.account.sign_transaction(tx, os.getenv("KEY"))
-tx_hash = uni_bot.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-print(f"トランザクション送信完了 | Hash: {tx_hash.hex()}")
+# # トランザクションの署名と送信
+# signed_tx = uni_bot.w3.eth.account.sign_transaction(tx, os.getenv("KEY"))
+# tx_hash = uni_bot.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+# print(f"トランザクション送信完了 | Hash: {tx_hash.hex()}")
 
-# トランザクション確認の待機
-tx_receipt = uni_bot.w3.eth.wait_for_transaction_receipt(tx_hash)
+# # トランザクション確認の待機
+# tx_receipt = uni_bot.w3.eth.wait_for_transaction_receipt(tx_hash)
 
-# 実行結果の表示
-print("\nトランザクション実行結果")
-print(f"ブロック番号: {tx_receipt['blockNumber']}")
-print(f"トランザクションインデックス: {tx_receipt['transactionIndex']}")
-print(f"合計L2ガス使用量: {tx_receipt['gasUsed'] * tx_receipt['effectiveGasPrice']} wei")
-print(f"ガス使用量: {tx_receipt['gasUsed']}")
-print(f"有効ガス価格: {tx_receipt['effectiveGasPrice']} wei")
+# # 実行結果の表示
+# print("\nトランザクション実行結果")
+# print(f"ブロック番号: {tx_receipt['blockNumber']}")
+# print(f"トランザクションインデックス: {tx_receipt['transactionIndex']}")
+# print(f"合計L2ガス使用量: {tx_receipt['gasUsed'] * tx_receipt['effectiveGasPrice']} wei")
+# print(f"ガス使用量: {tx_receipt['gasUsed']}")
+# print(f"有効ガス価格: {tx_receipt['effectiveGasPrice']} wei")
+
